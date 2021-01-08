@@ -34,8 +34,7 @@ function init() {
 // gets current forecast for selected city and calls uv index function
 function getCurrentWeather(thisCity, id) {
     var weatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${thisCity}&units=imperial&appid=${id}`;
-    var cityLat;
-    var cityLong;
+
 
     $.ajax({
         url: weatherURL,
@@ -50,9 +49,6 @@ function getCurrentWeather(thisCity, id) {
         $(".cityToday").append(`<p>Temperature: ${data.main.temp} &degF</p>`)
         $(".cityToday").append(`<p>Humidity: ${data.main.humidity} %</p>`)
         $(".cityToday").append(`<p>Wind: ${data.wind.speed} mph</p>`)
-        cityLat = data.coord.lat;
-        cityLong = data.coord.lon;
-        getUVI(id, cityLat, cityLong);
     })
 
 }
@@ -85,21 +81,8 @@ function getForecast(thisCity, id) {
 
     })
 }
-
-// called within getCurrentWeather() to get uv index for selected city
-function getUVI(id, cityLat, cityLong) {
-    var uvURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${cityLat}&lon=${cityLong}&appid=${id}`;
-
-    $.ajax({
-        url: uvURL,
-        method: "GET"
-    }).then(function (data) {
-        $(".cityToday").append(`<p>UV Index: <span class="badge badge-danger p-2">${data.value}</span></p>`);
-    })
-}
-
 // main function that clears divs and calls current and 5-day forecasts for city
-function displayCityWeather() {
+function displayWeather() {
     var thisCity = $(this).attr("data-city");
 
     $(".cityToday").empty();
@@ -124,5 +107,5 @@ $("form").on("submit", function(event) {
     $("#citySearchInput").val("");
 })
 
-// click event that calls displayCityWeather()
-$(".cityList").on("click", ".cityButton", displayCityWeather);
+// click event that calls displayWeather()
+$(".cityList").on("click", ".cityButton", displayWeather);
